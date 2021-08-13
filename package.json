@@ -18,5 +18,8 @@
         "svelte-preprocess": "^4.7.4",
         "tailwindcss": "^2.2.7"
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+        "just-clone": "^3.2.1"
+    }
 }
