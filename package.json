@@ -1,5 +1,5 @@
 {
-    "name": "~TODO~",
+    "name": "webshape",
     "version": "0.0.1",
     "scripts": {
         "dev": "svelte-kit dev",
@@ -20,6 +20,7 @@
     },
     "type": "module",
     "dependencies": {
-        "just-clone": "^3.2.1"
+        "just-clone": "^3.2.1",
+        "nanoid": "^3.1.25"
     }
 }
