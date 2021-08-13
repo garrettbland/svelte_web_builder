@@ -10,9 +10,13 @@
     },
     "devDependencies": {
         "@sveltejs/kit": "next",
+        "autoprefixer": "^10.3.1",
+        "postcss": "^8.3.6",
         "prettier": "~2.2.1",
         "prettier-plugin-svelte": "^2.2.0",
-        "svelte": "^3.34.0"
+        "svelte": "^3.34.0",
+        "svelte-preprocess": "^4.7.4",
+        "tailwindcss": "^2.2.7"
     },
     "type": "module"
 }
