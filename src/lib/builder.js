@@ -3,7 +3,7 @@
  * Accepts array of blocks and returns html
  */
 
-const LAYOUTS_TAGS = ['section', 'div']
+const LAYOUT_TAGS = ['section', 'div']
 const CONTENT_TAGS = ['h1', 'h2', 'h3', 'p', 'img']
 
 export const generate_html = (blocks) => {
@@ -13,7 +13,7 @@ export const generate_html = (blocks) => {
      */
     return blocks
         .map((block) => {
-            if (LAYOUTS_TAGS.includes(block.tag)) {
+            if (LAYOUT_TAGS.includes(block.tag)) {
                 return `
                     <${block.tag} class="${block.classes.join(' ')}">
                         ${generate_html(block.children)}
