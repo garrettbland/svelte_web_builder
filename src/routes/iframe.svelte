@@ -23,7 +23,9 @@
     let blocks = clone(example_blocks)
 
     onMount(() => {
-        console.log('mounted')
+        window.onmessage = (event) => {
+            console.log('Event from iframe =>', event.data)
+        }
     })
 
     /**
@@ -90,6 +92,14 @@
             // console.log(event.data)
             document.body.innerHTML = event.data
         }, false);
+
+        // testing posting message from iframe to parent
+        window.addEventListener('click', (event) => {
+            // Need to serialize HTMLElement because it has methods
+            // var html_element = JSON.parse(JSON.stringify(event.target))
+            var element_id = event.target.id
+            window.top.postMessage(element_id, '*')
+        })
     `
 </script>
 
@@ -110,8 +120,8 @@
                     <scrip${'t'}>${script_test}</scrip${'t'}>
                 </head>
                 <body>
-                    <div>
-                        <h1>test</h1>
+                    <div class="hover:bg-red-500">
+                        <h1 id="39ds9230">test</h1>
                     </div>
                 </body>
             </html>
