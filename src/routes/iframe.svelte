@@ -21,13 +21,19 @@
     import { example_blocks } from '../lib/example-blocks'
     import { generate_html } from '../lib/builder'
     import { clickOutside } from '../utils/clickOutside'
+    import { returnFound } from 'find-and'
 
     let showEditor = false
+    let currentBlock = {}
     let blocks = clone(example_blocks)
 
     onMount(() => {
+        test_button()
         window.onmessage = (event) => {
             console.log('Event from iframe ==>', event.data)
+            currentBlock = returnFound(blocks, {
+                id: event.data,
+            })
             showEditor = true
         }
     })
@@ -87,29 +93,6 @@
             },
         ]
     }
-
-    /**
-     * Script to run from iframe. This will listen for the window
-     * postMessage. From the event argument we get a few things,
-     * but most importantly, the 'data' object which is the rendered
-     * html we passed in from the window postMessage above
-     * Once we get that HTML string, we replace the document body with
-     * the latest HTML and bam, no reload
-     */
-    const script_test = `
-        window.addEventListener("message", (event) => {
-            // console.log(event.data)
-            document.body.innerHTML = event.data
-        }, false);
-
-        // testing posting message from iframe to parent
-        window.addEventListener('click', (event) => {
-            // Need to serialize HTMLElement because it has methods
-            // var html_element = JSON.parse(JSON.stringify(event.target))
-            var element_id = event.target.id
-            window.top.postMessage(element_id, '*')
-        })
-    `
 </script>
 
 <div class="relative">
@@ -128,6 +111,19 @@
                 class="absolute top-0 right-0 max-w-md w-full bg-white h-full overflow-y-scroll p-4 shadow-lg"
             >
                 This is the sidebar thing
+                <div>
+                    {#if currentBlock.tag === 'h1'}
+                        <input
+                            bind:value={currentBlock.data.content}
+                            class="p-4 border-2"
+                        />
+                    {/if}
+                </div>
+                <pre>
+                    <code>
+                        {JSON.stringify(currentBlock, null, 2)}
+                    </code>
+                </pre>
             </div>
         </div>
     {/if}
