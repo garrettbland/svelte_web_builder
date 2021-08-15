@@ -15,16 +15,20 @@
      * blocks in our app and the iframe will show new HTML without flash.
      */
 
+    import { fade, fly } from 'svelte/transition'
     import clone from 'just-clone'
     import { onMount } from 'svelte'
     import { example_blocks } from '../lib/example-blocks'
     import { generate_html } from '../lib/builder'
+    import { clickOutside } from '../utils/clickOutside'
 
+    let showEditor = false
     let blocks = clone(example_blocks)
 
     onMount(() => {
         window.onmessage = (event) => {
             console.log('Event from iframe ==>', event.data)
+            showEditor = true
         }
     })
 
@@ -108,12 +112,29 @@
     `
 </script>
 
-<div>
+<div class="relative">
     <h1>Svelte Iframe Test</h1>
+    {#if showEditor}
+        <div
+            transition:fade={{ duration: 200 }}
+            class="fixed top-0 left-0 z-40 w-screen h-screen bg-black bg-opacity-20"
+        >
+            <div
+                transition:fly={{ x: 400, duration: 200 }}
+                use:clickOutside
+                on:click_outside={() => {
+                    showEditor = false
+                }}
+                class="absolute top-0 right-0 max-w-md w-full bg-white h-full overflow-y-scroll p-4 shadow-lg"
+            >
+                This is the sidebar thing
+            </div>
+        </div>
+    {/if}
     <iframe
         title="preview"
         sandbox="allow-scripts"
-        class="w-full"
+        class="w-full z-10"
         onload="console.log('loaded...')"
         id="preview_iframe"
         src="/builder/index.html"
