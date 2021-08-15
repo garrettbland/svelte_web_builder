@@ -15,13 +15,17 @@ export const generate_html = (blocks) => {
         .map((block) => {
             if (LAYOUT_TAGS.includes(block.tag)) {
                 return `
-                    <${block.tag} class="${block.classes.join(' ')}">
+                    <${block.tag} id="${
+                    block.id
+                }" class="${block.classes.join(' ')}">
                         ${generate_html(block.children)}
                     </${block.tag}>
                 `
             } else if (CONTENT_TAGS.includes(block.tag)) {
                 return `
-                    <${block.tag} class="${block.classes.join(' ')}">
+                    <${block.tag} id="${
+                    block.id
+                }" class="${block.classes.join(' ')}">
                         ${block.data.content}
                     </${block.tag}>
                 `

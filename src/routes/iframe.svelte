@@ -24,7 +24,7 @@
 
     onMount(() => {
         window.onmessage = (event) => {
-            console.log('Event from iframe =>', event.data)
+            console.log('Event from iframe ==>', event.data)
         }
     })
 
@@ -46,14 +46,19 @@
          * special svelte reactivty stuff as a object
          */
         const _html = `${rendered_html}`
+        const message = {
+            name: 'render_html',
+            html: _html,
+        }
         const target_frame = document.getElementById('preview_iframe')
-        target_frame.contentWindow.postMessage(_html, '*')
+        target_frame.contentWindow.postMessage(message, '*')
     }
 
     const add_block = () => {
         /**
          * Example block adding
          */
+        console.log('lloooddd')
         blocks = [
             ...blocks,
             {
@@ -111,21 +116,7 @@
         class="w-full"
         onload="console.log('loaded...')"
         id="preview_iframe"
-        srcdoc={`
-            <html>
-                <head>
-                    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-                    <!-- Have to do this weird script template literal hack -->
-                    <!-- Otherwise prettier will jack it all up -->
-                    <scrip${'t'}>${script_test}</scrip${'t'}>
-                </head>
-                <body>
-                    <div class="hover:bg-red-500">
-                        <h1 id="39ds9230">test</h1>
-                    </div>
-                </body>
-            </html>
-        `}
+        src="/builder/index.html"
     />
 </div>
 <button on:click={() => add_block()}>Add Block</button>
