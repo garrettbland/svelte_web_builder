@@ -24,3 +24,7 @@ window.addEventListener('click', (event) => {
     var element_id = event.target.id
     window.top.postMessage(element_id, '*')
 })
+
+window.addEventListener('resize', (event) => {
+    console.log('window has changed sized')
+})

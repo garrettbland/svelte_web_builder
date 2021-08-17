@@ -95,8 +95,7 @@
     }
 </script>
 
-<div class="relative">
-    <h1>Svelte Iframe Test</h1>
+<div class="relative h-screen">
     {#if showEditor}
         <div
             transition:fade={{ duration: 200 }}
@@ -130,11 +129,14 @@
     <iframe
         title="preview"
         sandbox="allow-scripts"
-        class="w-full z-10"
+        class="w-full z-10 h-full"
         onload="console.log('loaded...')"
         id="preview_iframe"
         src="/builder/index.html"
+        style="resize: horizontal;"
     />
 </div>
-<button on:click={() => add_block()}>Add Block</button>
-<button on:click={() => test_button()}>Outside Button</button>
+<div class="fixed bottom-0 left-0 z-30 bg-gray-400">
+    <button on:click={() => add_block()}>Add Block</button>
+    <button on:click={() => test_button()}>Outside Button</button>
+</div>
