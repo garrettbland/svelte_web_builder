@@ -93,6 +93,11 @@
             },
         ]
     }
+
+    const update_preview_width = (width) => {
+        const preview = document.getElementById('preview_iframe')
+        preview.style.width = width
+    }
 </script>
 
 <div class="relative h-screen">
@@ -129,14 +134,19 @@
     <iframe
         title="preview"
         sandbox="allow-scripts"
-        class="w-full z-10 h-full"
+        class="w-full z-10 h-full mx-auto"
         onload="console.log('loaded...')"
         id="preview_iframe"
         src="/builder/index.html"
-        style="resize: horizontal;"
     />
 </div>
 <div class="fixed bottom-0 left-0 z-30 bg-gray-400">
     <button on:click={() => add_block()}>Add Block</button>
     <button on:click={() => test_button()}>Outside Button</button>
+    <button on:click={() => update_preview_width('400px')}
+        >MOBILE VIEW</button
+    >
+    <button on:click={() => update_preview_width('100%')}
+        >DESKTOP VIEW</button
+    >
 </div>
