@@ -23,12 +23,14 @@
     import { clickOutside } from '../utils/clickOutside'
     import { returnFound } from 'find-and'
 
+    let preview_frame
     let showEditor = false
     let currentBlock = {}
     let blocks = clone(example_blocks)
 
     onMount(() => {
         test_button()
+
         window.onmessage = (event) => {
             console.log('Event from iframe ==>', event.data)
             currentBlock = returnFound(blocks, {
@@ -60,8 +62,7 @@
             name: 'render_html',
             html: _html,
         }
-        const target_frame = document.getElementById('preview_iframe')
-        target_frame.contentWindow.postMessage(message, '*')
+        preview_frame.contentWindow.postMessage(message, '*')
     }
 
     const add_block = () => {
@@ -95,8 +96,7 @@
     }
 
     const update_preview_width = (width) => {
-        const preview = document.getElementById('preview_iframe')
-        preview.style.width = width
+        preview_frame.style.width = width
     }
 </script>
 
@@ -131,16 +131,15 @@
             </div>
         </div>
     {/if}
-    <div class="relative w-full h-full" id="food-bg">
-        <iframe
-            title="preview"
-            sandbox="allow-scripts"
-            class="w-full z-10 h-full mx-auto bg-white shadow-lg"
-            onload="console.log('loaded...')"
-            id="preview_iframe"
-            src="/builder/index.html"
-        />
-    </div>
+    <iframe
+        title="preview"
+        sandbox="allow-scripts"
+        class="w-full z-10 h-full mx-auto"
+        onload="console.log('loaded...')"
+        id="preview_iframe"
+        src="/builder/index.html"
+        bind:this={preview_frame}
+    />
 </div>
 <div class="fixed bottom-0 left-0 z-30 bg-gray-400">
     <button on:click={() => add_block()}>Add Block</button>
