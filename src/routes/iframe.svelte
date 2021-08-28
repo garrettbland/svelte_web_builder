@@ -131,15 +131,17 @@
             </div>
         </div>
     {/if}
-    <iframe
-        title="preview"
-        sandbox="allow-scripts"
-        class="w-full z-10 h-full mx-auto"
-        onload="console.log('loaded...')"
-        id="preview_iframe"
-        src="/builder/index.html"
-        bind:this={preview_frame}
-    />
+    <div class="relative w-full h-full" id="food-bg">
+        <iframe
+            title="preview"
+            sandbox="allow-scripts"
+            class="w-full z-10 h-full mx-auto bg-white shadow-lg"
+            onload="console.log('loaded...')"
+            id="preview_iframe"
+            src="/builder/index.html"
+            bind:this={preview_frame}
+        />
+    </div>
 </div>
 <div class="fixed bottom-0 left-0 z-30 bg-gray-400">
     <button on:click={() => add_block()}>Add Block</button>
