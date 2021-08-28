@@ -2,8 +2,8 @@
     "name": "webshape",
     "version": "0.0.1",
     "scripts": {
-        "dev": "svelte-kit dev",
-        "dev-test": "concurrently \"npm run dev\" \"npm run dev-preview\"",
+        "svelte-dev": "svelte-kit dev",
+        "dev": "concurrently \"npm run svelte-dev\" \"npm run dev-preview\"",
         "build": "svelte-kit build",
         "preview": "svelte-kit preview",
         "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. .",
