@@ -22,6 +22,7 @@
     import { generate_html } from '../lib/builder'
     import { clickOutside } from '../utils/clickOutside'
     import { returnFound } from 'find-and'
+    import { isEqual, cloneDeep } from 'lodash'
 
     let preview_frame
     let showEditor = false
@@ -35,7 +36,7 @@
 
         window.onmessage = (event) => {
             console.log('Event from iframe ==>', event.data)
-            currentBlock = returnFound(blocks, {
+            currentBlock = returnFound(cloneDeep(blocks), {
                 id: event.data,
             })
             showEditor = true
@@ -48,14 +49,6 @@
     $: rendered_html = generate_html(blocks)
 
     /**
-     * Generate clone of current blocks
-     */
-    const generate_clone = (blocks) => {
-        console.log('generating clone of current blocks...')
-        current_block_clone = JSON.stringify(blocks)
-    }
-
-    /**
      * Testing out watching for changes on the currentBlock
      */
     $: {
@@ -66,17 +59,15 @@
             current_block_clone = {}
         } else {
             if (Object.entries(current_block_clone).length === 0) {
-                generate_clone(currentBlock)
+                console.log('Cloning block...')
+                current_block_clone = cloneDeep(currentBlock)
             } else {
-                if (
-                    current_block_clone !==
-                    JSON.stringify(currentBlock)
-                ) {
+                if (isEqual(current_block_clone, currentBlock)) {
+                    has_changes = false
+                    console.log('no changes...')
+                } else {
                     has_changes = true
                     console.log('there are changes...')
-                } else {
-                    has_changes = false
-                    console.log('none changes...')
                 }
             }
         }
@@ -147,8 +138,14 @@
                 transition:fly={{ x: 400, duration: 200 }}
                 use:clickOutside
                 on:click_outside={() => {
-                    showEditor = false
-                    currentBlock = {}
+                    // Make sure the window doesn't accidentaly close
+                    // if there are changes
+                    if (has_changes) {
+                        alert('YOu have changes')
+                    } else {
+                        showEditor = false
+                        currentBlock = {}
+                    }
                 }}
                 class="absolute top-0 right-0 max-w-md w-full bg-white h-full overflow-y-scroll p-4 shadow-lg"
             >
@@ -156,6 +153,12 @@
                 <p>
                     Are there changes? <strong>{has_changes}</strong>
                 </p>
+                <button
+                    on:click={() => {
+                        showEditor = false
+                        currentBlock = {}
+                    }}>Confirm Changes</button
+                >
                 <div>
                     {#if currentBlock.tag === 'h1'}
                         <input
