@@ -26,6 +26,8 @@
     let preview_frame
     let showEditor = false
     let currentBlock = {}
+    let has_changes = false
+    let current_block_clone = {}
     let blocks = clone(example_blocks)
 
     onMount(() => {
@@ -44,6 +46,41 @@
      * Reactively make rendered_html the latest html string from blocks
      */
     $: rendered_html = generate_html(blocks)
+
+    /**
+     * Generate clone of current blocks
+     */
+    const generate_clone = (blocks) => {
+        console.log('generating clone of current blocks...')
+        current_block_clone = JSON.stringify(blocks)
+    }
+
+    /**
+     * Testing out watching for changes on the currentBlock
+     */
+    $: {
+        // First check to see if object is empty
+        if (Object.entries(currentBlock).length === 0) {
+            console.log('0 entries in current block')
+            has_changes = false
+            current_block_clone = {}
+        } else {
+            if (Object.entries(current_block_clone).length === 0) {
+                generate_clone(currentBlock)
+            } else {
+                if (
+                    current_block_clone !==
+                    JSON.stringify(currentBlock)
+                ) {
+                    has_changes = true
+                    console.log('there are changes...')
+                } else {
+                    has_changes = false
+                    console.log('none changes...')
+                }
+            }
+        }
+    }
 
     /**
      * Here I just made a test button outside of the iframe
@@ -111,10 +148,14 @@
                 use:clickOutside
                 on:click_outside={() => {
                     showEditor = false
+                    currentBlock = {}
                 }}
                 class="absolute top-0 right-0 max-w-md w-full bg-white h-full overflow-y-scroll p-4 shadow-lg"
             >
-                This is the sidebar thing
+                This is the sidebar thing.
+                <p>
+                    Are there changes? <strong>{has_changes}</strong>
+                </p>
                 <div>
                     {#if currentBlock.tag === 'h1'}
                         <input
