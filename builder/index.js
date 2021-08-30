@@ -2,14 +2,26 @@
  * Testing
  */
 
+/**
+ * Send an initial message on load to the parent
+ * to load blocks after iframe is initialized. Ran into
+ * issues where nothing would render if iframe wasn't ready,
+ * this resolves that.
+ */
+window.addEventListener('load', () => {
+    console.log("==> Posting 'LOADED' message from iframe")
+    window.top.postMessage('LOADED', '*')
+})
+
 window.addEventListener(
     'message',
     (event) => {
         // console.log(event.data)
-        console.log('message event firing...')
-        console.log(event.data)
+        console.log(
+            `==> Window onMessage event received in iframe`,
+            event.data
+        )
         if (event.data.name) {
-            console.log('WORKKKK')
             document.getElementById('main').innerHTML =
                 event.data.html
         }

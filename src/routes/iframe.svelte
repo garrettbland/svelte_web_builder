@@ -32,14 +32,19 @@
     let blocks = clone(example_blocks)
 
     onMount(() => {
-        test_button()
-
         window.onmessage = (event) => {
-            console.log('Event from iframe ==>', event.data)
-            currentBlock = returnFound(cloneDeep(blocks), {
-                id: event.data,
-            })
-            showEditor = true
+            console.log(
+                `==> Window onMessage event received in parent`,
+                event.data
+            )
+            if (event.data === 'LOADED') {
+                test_button()
+            } else {
+                currentBlock = returnFound(cloneDeep(blocks), {
+                    id: event.data,
+                })
+                showEditor = true
+            }
         }
     })
 
@@ -97,7 +102,7 @@
         /**
          * Example block adding
          */
-        console.log('lloooddd')
+
         blocks = [
             ...blocks,
             {
@@ -123,6 +128,10 @@
         ]
     }
 
+    /**
+     * Sets the width of the iframe preview
+     * @param width
+     */
     const update_preview_width = (width) => {
         preview_frame.style.width = width
     }
@@ -175,12 +184,12 @@
             </div>
         </div>
     {/if}
+
     <div class="relative w-full h-full" id="food-bg">
         <iframe
             title="preview"
             sandbox="allow-scripts"
             class="w-full z-10 h-full mx-auto bg-white shadow-lg"
-            onload="console.log('loaded...')"
             id="preview_iframe"
             src="/builder/index.html"
             bind:this={preview_frame}

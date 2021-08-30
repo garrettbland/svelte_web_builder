@@ -121,13 +121,22 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 /**
  * Testing
  */
+
+/**
+ * Send an initial message on load to the parent
+ * to load blocks after iframe is initialized. Ran into
+ * issues where nothing would render if iframe wasn't ready,
+ * this resolves that.
+ */
+window.addEventListener('load', function () {
+  console.log("==> Posting 'LOADED' message from iframe");
+  window.top.postMessage('LOADED', '*');
+});
 window.addEventListener('message', function (event) {
   // console.log(event.data)
-  console.log('message event firing...');
-  console.log(event.data);
+  console.log("==> Window onMessage event received in iframe", event.data);
 
   if (event.data.name) {
-    console.log('WORKKKK');
     document.getElementById('main').innerHTML = event.data.html;
   }
 }, false); // testing posting message from iframe to parent
@@ -169,7 +178,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64038" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56116" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
